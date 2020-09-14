@@ -59,7 +59,7 @@ module.exports = {
 		//TASK 2
 		socialCheck();
 
-		//TASK 3-4-5-6
+		//TASK 3-3a-4-4a-5-6-7-7a-8
 		//itemSearch(products); ------- implemented in function  addToCartItems()
 
 		for (let i = 0; i < loopCount; i++) {
@@ -69,10 +69,6 @@ module.exports = {
 			cartAllItemsClear();
 		};
 
-
-
-
-		//prepare
 		function prepare() {
 			client
 				.maximizeWindow()
@@ -81,22 +77,19 @@ module.exports = {
 				.waitForElementPresent(selectors.region, timeout);
 		};
 
-		//region check
 		function regionCheck() {
 			client
 				.click(selectors.region)
-			//.pause(timeout);
 		};
 
-		//email check clouse
 		function emailCheckClouse() {
 			client
 				.waitForElementVisible('body', timeout)
 				.click(selectors.emailCloseButton)
-				.pause(timeout);
+				.waitForElementVisible('body', timeout)
+			//.pause(timeout);
 		};
 
-		//social links check
 		function socialCheck() {
 			openLink(socialLink.facebook);
 			changeActiveWindowTo_2();
@@ -119,15 +112,12 @@ module.exports = {
 			closeWindow();
 		}
 
-
-		//open link
 		function openLink(link) {
 			client
 				.click(link)
-				.pause(timeout);
+				.pause(2 * 1000);
 		};
 
-		//close window
 		function closeWindow() {
 			client
 				.closeWindow()
@@ -139,7 +129,6 @@ module.exports = {
 				.waitForElementVisible('body', timeout)
 		};
 
-		//Change active tab
 		function changeActiveWindowTo_2() {
 			client.windowHandles(function (result) {
 				var tab = result.value[1];
@@ -147,7 +136,6 @@ module.exports = {
 			});
 		};
 
-		//Save web site address to variable		&&		Link asserting 
 		function urlTest(labelLink) {
 			client
 				.url(function (result) {
@@ -159,17 +147,16 @@ module.exports = {
 				});
 		};
 
-		//TASK	3-3a-5
-		function addToCartItems(params) {
+		function addToCartItems() {
 			if (loaderoGroup === 0) {
 				for (let i = 0, productsInCart = 1; i < products.length; i += 2, cartItem++, productsInCart++) {
 					client
 						.click(selectors.searchArea)
 						.setValue(selectors.searchArea, [products[i]])
-						.click(selectors.searchButton)
-						.pause(4 * 1000)
+						.click(selectors.searchButton)	
+						.waitForElementVisible('body', timeout)
 						.click(selectors.addToCartButton)
-						.pause(8 * 1000)
+						.pause(5 * 1000)
 						.click(selectors.cartFrameCloseBtn)
 						.pause(2 * 1000)
 						.click(selectors.searchClearButton)
@@ -183,9 +170,9 @@ module.exports = {
 						.click(selectors.searchArea)
 						.setValue(selectors.searchArea, [products[i]])
 						.click(selectors.searchButton)
-						.pause(4 * 1000)
+						.waitForElementVisible('body', timeout)
 						.click(selectors.addToCartButton)
-						.pause(8 * 1000)
+						.pause(5 * 1000)
 						.click(selectors.cartFrameCloseBtn)
 						.pause(2 * 1000)
 						.click(selectors.searchClearButton)
@@ -199,9 +186,7 @@ module.exports = {
 		};
 
 		function screenshot(iterationCount) {
-
 			client.saveScreenshot(`./assets/screenShot_${iterationCount}.png`);
-
 		}
 
 		function totalSum() {
@@ -216,16 +201,14 @@ module.exports = {
 		};
 
 		function cartAllItemsClear() {
-			for (let i = 1; i <= cartItem; i++) {
+			for (let i = 0, x = 1; i <= cartItem; i++, x++) {
 				client
-					.pause(1 * 2000)
+					//.pause(1 * 2000)
 					.waitForElementVisible('body', timeout)
 					.click(selectors.cartClearBtn)
-					.pause(timeout)
-					.perform(() => console.log(`${i} removed items from cart`))
-				};
+					.waitForElementVisible('body', timeout)
+					.perform(() => console.log(`${x} removed items from cart`))
+			};
 		};
-
-
 	}
 }
