@@ -1,5 +1,6 @@
 module.exports = {
 	function(client) {
+		//			Selectors
 		const selectors = {
 			webSite: 'https://www.bestbuy.com/',
 			region: '[alt="United States"]',
@@ -26,6 +27,8 @@ module.exports = {
 		var currentUrl = '';
 
 		const timeout = 3 * 1000;
+		const uploadTimeout = 5 * 1000;
+
 		let cartItem = 0;
 		let products = [
 			'Apple - AirPods with Charging Case (Latest Model) - White',
@@ -38,13 +41,14 @@ module.exports = {
 			'Samsung - 65" Class - 7 Series - 4K UHD TV',
 			'HP - Pavilion x360 2-in-1 14" Touch-Screen Laptop',
 		];
+		// 0- even 1- odd
 		let loaderoGroup = 0;
 		let loopCount = 5;
 
 		prepare();
 		regionCheck();
 		emailCheckClouse();
-		socialCheck();
+		//socialCheck();
 
 		for (let i = 0; i < loopCount; i++) {
 			addToCartItems(products);
@@ -52,14 +56,16 @@ module.exports = {
 			screenshot(i);
 			cartAllItemsClear();
 			cartItem = 0;
+			// return cartItem = 0;
 		};
 
 		function prepare() {
 			client
 				.maximizeWindow()
 				.url(selectors.webSite)
-				.waitForElementVisible(selectors.region)
+				.waitForElementVisible('body', timeout)
 				.waitForElementPresent(selectors.region, timeout)
+				.pause(5 * 1000)
 		};
 
 		function regionCheck() {
@@ -69,7 +75,7 @@ module.exports = {
 
 		function emailCheckClouse() {
 			client
-				.waitForElementVisible('body', timeout)
+				.pause(1 * 3000)
 				.click(selectors.emailCloseButton)
 				.waitForElementVisible('body', timeout)
 				.pause(timeout);
@@ -99,14 +105,15 @@ module.exports = {
 
 		function openLink(link) {
 			client
-				.waitForElementVisible('[class="social-device-feedback-block"]',timeout)
+				.pause(2 * 1000)
 				.click(link)
+				.pause(2 * 1000);
 		};
 
 		function closeWindow() {
 			client
 				.closeWindow()
-				.pause(1 * 1000)
+				.pause(3 * 1000)
 				.windowHandles(function (result) {
 					var tab = result.value[0];
 					client.switchWindow(tab);
@@ -139,16 +146,15 @@ module.exports = {
 						.click(selectors.searchArea)
 						.setValue(selectors.searchArea, [products[i]])
 						.click(selectors.searchButton)
-						.pause(2*1000)
-						.waitForElementVisible(selectors.addToCartButton,timeout)
+						.pause(5 * 1000)
 						.click(selectors.addToCartButton, () => {
 							console.log(`Items in your cart[callback] = ${productsInCart}`)
 						})
-						.waitForElementVisible(selectors.cartFrameCloseBtn,false)
-						.pause(1 * 1000)
+						.pause(6 * 1000)
 						.click(selectors.cartFrameCloseBtn)
-						.waitForElementVisible(selectors.searchClearButton)
+						.pause(5 * 1000)
 						.click(selectors.searchClearButton)
+						.pause(5 * 1000)
 						.perform(() => {
 							productsInCart = cartItem;
 						});
@@ -181,7 +187,7 @@ module.exports = {
 		function totalSum() {
 			client
 				.click(selectors.cart)
-				.waitForElementVisible('body',timeout)
+				.pause(uploadTimeout)
 				.getText(selectors.priceForAllItems, function (result) {
 					price = result.value;
 					console.log(result)
@@ -192,12 +198,13 @@ module.exports = {
 		function cartAllItemsClear() {
 			for (let i = 0, x = 0; i < cartItem; i++, x++) {
 				client
-					.pause(1 * 1000)
+					.pause(1 * 5000)
 					.waitForElementVisible('body', timeout)
 					.click(selectors.cartClearBtn, () => {
 						x++;
 						console.log(`${x} removed items from cart`)
 					})
+				//.waitForElementVisible('body', timeout)
 			};
 		};
 	}

@@ -39,7 +39,7 @@ module.exports = {
 		const uploadTimeout = 5 * 1000;
 		var currentUrl = '';
 		let products = [
-			// TODO: Remove these unnecessary number comments
+			//DONE      TODO: Remove these unnecessary number comments
 			'Apple - AirPods with Charging Case (Latest Model) - White',
 			'apple watch series 5 (gps) 44mm space gray aluminum case with black sport band - space gra',
 			'samsung - 65" class - 7 series - 4k uhd tv - smart - led - with hdr',
@@ -59,7 +59,7 @@ module.exports = {
 		regionCheck();
 		emailCheckClouse();
 		//		TASK 2
-		// TODO: These 5 repetative functions can be wrapped into another function which is run in a loop where you pass different params
+		//DONE !!  TODO: These 5 repetative functions can be wrapped into another function which is run in a loop where you pass different params
 		openLink(socialLink.facebook);
 		changeActiveWindowTo_2();
 		urlTest(socialLink.facebookLabelLink);
