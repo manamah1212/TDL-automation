@@ -48,6 +48,7 @@ module.exports = {
 		let loaderoGroup = 0;
 		let loopCount = 5;
 		let originalHandle;
+		let initialHandles;
 
 		prepare();
 		checkLinks();
@@ -65,9 +66,11 @@ module.exports = {
 			client
 				.maximizeWindow()
 				.url(selectors.webSite)
+				.windowHandles(({ value }) => (initialHandles = value))
 				.windowHandle(({ value }) => (originalHandle = value))
 				.waitForElementVisible('[alt="United States"]', 5 * 1000)
 				.click('[alt="United States"]')
+				
 				.waitForElementVisible('body', 5 * 1000)
 				.click('button[class="c-close-icon  c-modal-close-icon"]')
 				.waitForElementVisible('body', 5 * 1000)
@@ -82,13 +85,13 @@ module.exports = {
 
 		function checkLink(linkSelector, urlString) {
 			client
+				.waitForElementVisible(linkSelector, timeout)
 				.click(linkSelector)
 				.windowHandles(({ value }) => {
-					// [landingHandle, blogHandle]
 					const handles = value;
 
 					handles.forEach(handle => {
-						if (handle !== originalHandle) {
+						if (!initialHandles.includes(handle)) {
 							client.switchWindow(handle);
 						}
 					});
@@ -101,44 +104,26 @@ module.exports = {
 		}
 
 		function addToCartItems() {
-			if (loaderoGroup === 0) {
-				for (let i = 0, productsInCart = 1; i < products.length; i += 2, cartItem++, productsInCart++) {
-					client
-						.click(selectors.searchArea)
-						.setValue(selectors.searchArea, [products[i]])
-						.click(selectors.searchButton)
-						.pause(2 * 1000)
-						.waitForElementVisible(selectors.addToCartButton, timeout)
-						.click(selectors.addToCartButton, () => {
-							console.log(`Items in your cart[callback] = ${productsInCart}`)
-						})
-						.waitForElementVisible(selectors.cartFrameCloseBtn, false)
-						.pause(1 * 1000)
-						.click(selectors.cartFrameCloseBtn)
-						.waitForElementVisible(selectors.searchClearButton)
-						.click(selectors.searchClearButton)
-						.perform(() => {
-							productsInCart = cartItem;
-						});
-				};
-			} else if (loaderoGroup === 1) {
-				for (let i = 1, productsInCart = 1; i < products.length; i += 2, cartItem++, productsInCart++) {
-					client
-						.click(selectors.searchArea)
-						.setValue(selectors.searchArea, [products[i]])
-						.click(selectors.searchButton)
-						.waitForElementVisible('body', timeout)
-						.click(selectors.addToCartButton)
-						.pause(5 * 1000)
-						.click(selectors.cartFrameCloseBtn)
-						.pause(5 * 1000)
-						.click(selectors.searchClearButton)
-						.pause(timeout, () => {
-							console.log(`Items in your cart[callback] = ${productsInCart}`)
-						});
-				};
-			} else {
-				console.log(`enter correct filter to variable LoaderoGroup : 0 = for even search, 1 = for odd search`)
+			let i = loaderoGroup % 2 === 0 ? 0 : 1;//if loaderoGroup % 2 = 0 => 0 \\ if loaderoGroup %2 != = => 1
+
+			for (productsInCart = 1; i < products.length; i += 2, cartItem++, productsInCart++) {
+				client
+					.click(selectors.searchArea)
+					.setValue(selectors.searchArea, [products[i]])
+					.click(selectors.searchButton)
+					.pause(2 * 1000)
+					.waitForElementVisible(selectors.addToCartButton, timeout)
+					.click(selectors.addToCartButton, () => {
+						console.log(`Items in your cart[callback] = ${productsInCart}`)
+					})
+					.waitForElementVisible(selectors.cartFrameCloseBtn, false)
+					.pause(1 * 1000)
+					.click(selectors.cartFrameCloseBtn)
+					.waitForElementVisible(selectors.searchClearButton)
+					.click(selectors.searchClearButton)
+					.perform(() => {
+						productsInCart = cartItem;
+					});
 			};
 		};
 
