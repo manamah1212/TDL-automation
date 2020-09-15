@@ -59,7 +59,7 @@ module.exports = {
 				.maximizeWindow()
 				.url(selectors.webSite)
 				.waitForElementVisible(selectors.region)
-				.waitForElementPresent(selectors.region, timeout)
+				//.waitForElementPresent(selectors.region, timeout)
 		};
 
 		function regionCheck() {

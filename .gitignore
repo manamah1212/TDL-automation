@@ -1,7 +1,6 @@
 # Test outputs and node_modules
-tests_output/
-*.log
-node_modules/
+exam/tests_output/
+exam/*.log
+exam/node_modules/
 
 .DS_Store
-.vscode/
