@@ -134,7 +134,7 @@ module.exports = {
 
 		function addToCartItems() {
 			if (loaderoGroup === 0) {
-				for (let i = 2, productsInCart = 1; i < products.length; i += 3, cartItem++, productsInCart++) {
+				for (let i = 0, productsInCart = 1; i < products.length; i += 2, cartItem++, productsInCart++) {
 					client
 						.click(selectors.searchArea)
 						.setValue(selectors.searchArea, [products[i]])
