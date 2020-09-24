@@ -13,10 +13,13 @@ module.exports = {
 
         timeout = 5 * 1000;
 
-
         prepare();
         searchChennal();
-        playVideo(50 * 1000);
+        playVideo(2 * 1000);
+
+        for (let i = 0; i < 2; i++) {
+            otherVideo(100 * 1000)
+        }
 
         function prepare() {
             client
@@ -41,6 +44,13 @@ module.exports = {
             client
                 .click('button[class="ytp-large-play-button ytp-button"]')
                 .waitForElementVisible('body', timeout)
+                .pause(seconds)
+        }
+        function otherVideo(seconds) {
+            client
+                .click('ytd-channel-name[class="style-scope ytd-video-owner-renderer"]')
+                .pause(2 * 1000)
+                .url('https://www.youtube.com/watch?v=8QKNZWrygPM&list=PLWspRjhyGMM8UhOVFjutNZmhJo1nQEN8C&index=8')
                 .pause(seconds)
         }
     }
