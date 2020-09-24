@@ -17,7 +17,7 @@ module.exports = {
         searchChennal();
         playVideo(2 * 1000);
 
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 5; i++) {
             otherVideo(100 * 1000)
         }
 
