@@ -8,52 +8,40 @@ module.exports = {
             searchArea: 'div[id="search-input"]',
             searchBtn: 'yt-icon[class="style-scope ytd-searchbox"]',
             videosBtn: 'a[data-sc="V"]',
-            videoCheck: 'a[href="https://www.youtube.com/watch?v=uds0QBCgJ8I"]',
+            videoCheck: 'a[href="https://www.youtube.com/watch?v=bcjPzrh5IOA"]:last-of-type',
         }
 
         timeout = 5 * 1000;
 
 
         prepare();
-       searchChennal();
-
+        searchChennal();
+        playVideo(50 * 1000);
 
         function prepare() {
             client
-                // .maximizeWindow()
-                // .url(selectors.url)
-                // .waitForElementVisible(selectors.popUpWindowsCloseBtn, timeout)
-                // .click(selectors.popUpWindowsCloseBtn)
-                // .pause(1 * 1000)
-                // .element('css selector', 'iframe[src]', result => {
-                //     client.frame(result.value).click('#introAgreeButton');
-                // })
-                // .pause(1 * 1000)
                 .url('https://www.google.com')
                 .pause(1 * 1000)
                 .element('css selector', 'iframe[src]', result => {
                     client.frame(result.value).click('#introAgreeButton');
                 })
-                .setValue('input[title="Search"]', ['Monotif', client.Keys.ENTER])
-               // .pause(5 * 1000);
+                .setValue('input[title="Search"]', ['как накачать пресс за 7 минут monotif', client.Keys.ENTER])
         };
 
         function searchChennal() {
             client
-                //.element('css selector', selectors.searchArea, result => {
-                //     client
-                //         .frame(result.value)
-                //         .click(selectors.searchArea)
-                //         .setValue(['Monotif'])
-                //         .click(selectors.searchBtn)
-                // })
-                // .setValue(selectors.searchArea, ['Monotif'])
-                // .click(selectors.searchBtn)
                 .pause(1 * 1000)
                 .click(selectors.videosBtn)
                 .click(selectors.videoCheck)
-                .pause(5 * 1000)
+                .pause(2 * 1000)
+                .click('paper-button[class="style-scope yt-button-renderer style-text size-small"]')
+                .pause(1 * 1000)
         }
-
+        function playVideo(seconds) {
+            client
+                .click('button[class="ytp-large-play-button ytp-button"]')
+                .waitForElementVisible('body', timeout)
+                .pause(seconds)
+        }
     }
 };
