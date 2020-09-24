@@ -51,7 +51,10 @@ module.exports = {
                 .click('ytd-channel-name[class="style-scope ytd-video-owner-renderer"]')
                 .pause(2 * 1000)
                 .url('https://www.youtube.com/watch?v=8QKNZWrygPM&list=PLWspRjhyGMM8UhOVFjutNZmhJo1nQEN8C&index=8')
-                .pause(seconds)
+                .pause(seconds, () =>  {
+                    console.log('+1 view')
+                })
+                
         }
     }
 };
